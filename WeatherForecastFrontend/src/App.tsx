@@ -1,30 +1,14 @@
-import { AddressAutofill } from '@mapbox/search-js-react';
-import { AddressBar } from './address-bar'
-import { ForecastResults } from './forecast-results';
-
+import { QueryClient, QueryClientProvider } from "react-query";
+import { WeatherForecastScreen } from "./components/weather-forecast-screen";
 
 function App() {
+  const queryClient = new QueryClient();
 
   return (
-    <>
-   
-      <h1>Weather Forecast</h1>
-
-
-    <AddressBar/>
-    <form>
-            <AddressAutofill accessToken="my-access-token-here">
-                <input
-                    name="address" placeholder="Address" type="text"
-                    autoComplete="address-line1"
-                />
-            </AddressAutofill>
-            </form>
-    <ForecastResults>
-
-    </ForecastResults>
-    </>
-  )
+    <QueryClientProvider client={queryClient}>
+      <WeatherForecastScreen></WeatherForecastScreen>
+    </QueryClientProvider>
+  );
 }
 
-export default App
+export default App;
