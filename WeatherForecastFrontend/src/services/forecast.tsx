@@ -2,7 +2,10 @@ import { WeatherLocation } from "../models/weather-location";
 import { createApiClient } from "./api-client";
 
 type ForecastResponse = {
-  data: Forecast[];
+  data: {
+    forecastedDays: Forecast[];
+    isFromCache: boolean;
+  };
 };
 
 type Forecast = {

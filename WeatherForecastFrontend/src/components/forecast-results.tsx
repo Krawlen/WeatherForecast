@@ -31,9 +31,12 @@ export const ForecastResults = ({
   }
 
   return (
-    <div className="w-5/6 flex flex-row overflow-x-auto items-center justify-center">
+    <div className="w-5/6 flex flex-col overflow-x-auto items-center justify-center">
+      <h2 className="text-lg">
+        {data.isFromCache ? "Loaded from cache" : "Loaded Fresh"}
+      </h2>
       <div className="flex  flex-row gap-6 justify-center items-center w-full overflow-visible">
-        {data.map((v, i) => {
+        {data.forecastedDays.map((v, i) => {
           return (
             <ForecastResult
               key={i}

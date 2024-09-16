@@ -6,7 +6,10 @@ module V1
       daily_forecasts = service.fetch_forecast
 
       render json: {
-        data: daily_forecasts
+        data: {
+          forecasted_days: daily_forecasts[:forecasted_days],
+          is_from_cache: daily_forecasts[:is_from_cache]
+        }
       }
     end
   end

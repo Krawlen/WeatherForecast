@@ -4,7 +4,7 @@ class MapboxService
   include HTTParty
   base_uri 'https://api.mapbox.com'
 
-  def get_temp_token
+  def fetch_temp_token
     body = {
       expires: Time.zone.now + 59.minutes,
       scopes: []
