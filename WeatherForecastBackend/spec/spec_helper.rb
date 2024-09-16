@@ -16,6 +16,7 @@
 #
 # See https://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 require 'helpers/api_helpers'
+require 'webmock/rspec'
 
 RSpec.configure do |config|
   config.include Helpers::ApiHelpers, type: :request

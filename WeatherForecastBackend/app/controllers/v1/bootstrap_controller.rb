@@ -3,9 +3,14 @@
 module V1
   class BootstrapController < ApplicationController
     def show
-      render json: {
-        mapbox_key: MapboxService.new.fetch_temp_token
-      }
+      token = MapboxService.new.fetch_temp_token
+      if token
+        render json: {
+          mapbox_key: token
+        }
+      else
+        render json: { error: 'Upstream service is unavailable. Try again later' }
+      end
     end
   end
 end

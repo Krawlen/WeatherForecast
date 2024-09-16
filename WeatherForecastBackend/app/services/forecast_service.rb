@@ -2,7 +2,10 @@
 
 class ForecastService
   include HTTParty
+  include ActiveModel::Validations
   base_uri 'https://api.open-meteo.com/'
+
+  validates :zip_code, :latitude, :longitude, presence: true
 
   attr_reader :zip_code, :latitude, :longitude
 
@@ -14,9 +17,13 @@ class ForecastService
   end
 
   def fetch_forecast
+    return unless valid?
+
     raw_forecast = fetch_from_cache
     is_from_cache = raw_forecast.present?
     raw_forecast ||= fetch_from_remote
+
+    return unless raw_forecast
 
     daily_data = raw_forecast['daily']
     daily_units = raw_forecast['daily_units']
@@ -36,7 +43,10 @@ class ForecastService
   end
 
   def fetch_from_cache
-    Rails.cache.fetch(cache_key)
+    cached_value = Rails.cache.fetch(cache_key)
+    return unless cached_value
+
+    JSON.parse(cached_value).with_indifferent_access
   end
 
   def fetch_from_remote
@@ -48,8 +58,9 @@ class ForecastService
                                 # We want to include the current day in the forecast
                                 forecast_days: FORECAST_DAYS
                               } })
-    raw_forecast = JSON.parse(response.body).with_indifferent_access
-    Rails.cache.write(cache_key, raw_forecast, expires_in: 30.minutes)
-    raw_forecast
+    return unless response.success?
+
+    Rails.cache.write(cache_key, response.body, expires_in: 30.minutes)
+    JSON.parse(response.body).with_indifferent_access
   end
 end

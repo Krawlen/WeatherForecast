@@ -3,7 +3,12 @@ module V1
     def create
       service = ForecastService.new(zip_code: params[:zip_code], latitude: params[:latitude],
                                     longitude: params[:longitude])
+
+      return render json: { errors: service.errors.messages }, status: :unprocessable_entity unless service.valid?
+
       daily_forecasts = service.fetch_forecast
+
+      return render json: { errors: 'Upstream service is unavailable. Try again later' } unless daily_forecasts
 
       render json: {
         data: {

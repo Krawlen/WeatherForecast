@@ -6,7 +6,7 @@ class MapboxService
 
   def fetch_temp_token
     body = {
-      expires: Time.zone.now + 59.minutes,
+      expires: (Time.zone.now + 59.minutes).iso8601,
       scopes: []
     }.to_json
 
