@@ -1,50 +1,24 @@
-# React + TypeScript + Vite
+# Weather Forecast Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This app is the frontend for the Weather Forecast app. This is a react app that provides a dynamic experience for users to search the weather forecast for an address. This app _REQUIRES_ the backend project to be able to run successfully.
 
-Currently, two official plugins are available:
+## Libraries and Dependencies
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- [Tailwind](https://tailwindcss.com) A utility-first CSS framework packed with classes like flex, pt-4, text-center and rotate-90 that can be composed to build any design, directly in your markup.
 
-## Expanding the ESLint configuration
+  Tailwind is used to reduce the amount of css needed as well as keep the style consistency across different components
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- [Mapbox Geocoding](https://docs.mapbox.com/mapbox-search-js/api/react/geocoding/): Used to build a search box that allows the user to search an address and get the latitude, longitude and zip code back.
+  In order to use Mapbox Geocoding an access token is needed. To prevent long-lived access tokens being public the access token is requested directly to the backend that way the frontend does not store/hold the token and the backend can rotate them as needed
 
-- Configure the top-level `parserOptions` property like this:
+## Usage
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ["./tsconfig.node.json", "./tsconfig.app.json"],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-});
-```
+### Requirements:
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+- Docker
+- Backend app running
 
-```js
-// eslint.config.js
-import react from "eslint-plugin-react";
+### Running the app (in dev)
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: "18.3" } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs["jsx-runtime"].rules,
-  },
-});
-```
+1. Create a .env file using .env.example as a starting point. Make sure to update the values as needed.
+2.
