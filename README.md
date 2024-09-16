@@ -1,5 +1,7 @@
 # WeatherForecast
 
+![alt text](demo.png)
+
 This app allows users to enter an address to receive the forecast for the next 7 days( including today)
 
 This app is structured of a Rails backend with a React frontend. All communication is done via HTTP with json payload/response
