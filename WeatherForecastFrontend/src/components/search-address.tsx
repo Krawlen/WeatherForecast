@@ -40,23 +40,27 @@ export const SearchAddress = ({
   };
 
   return (
-    <form onSubmit={onFormSubmit} id="weather-form">
+    <form onSubmit={onFormSubmit} id="weather-form" className="w-full">
       <div className="flex flex-row justify-center gap-2 items-center">
-        <label htmlFor="search">Enter Address:</label>
+        <label className="text-base" htmlFor="search">
+          Enter Address:
+        </label>
 
-        <Geocoder
-          value={search}
-          onChange={handleSearchChange}
-          onSuggest={(res) => {
-            if (res.features[0]) {
-              setTopSuggestion(res.features[0]);
-            }
-          }}
-          onRetrieve={(res) => {
-            handleSuggestionPicked(res);
-          }}
-          accessToken={mapboxKey}
-        />
+        <div className="w-1/3">
+          <Geocoder
+            value={search}
+            onChange={handleSearchChange}
+            onSuggest={(res) => {
+              if (res.features[0]) {
+                setTopSuggestion(res.features[0]);
+              }
+            }}
+            onRetrieve={(res) => {
+              handleSuggestionPicked(res);
+            }}
+            accessToken={mapboxKey}
+          />
+        </div>
       </div>
     </form>
   );

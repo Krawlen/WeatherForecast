@@ -1,14 +1,12 @@
 module V1
   class ForecastController < ApplicationController
     def create
-      sample_data = { day: 'sun',
-                      forecast: {
-                        max: '12'
-                      } }
+      service = ForecastService.new(zip_code: params[:zip_code], latitude: params[:latitude],
+                                    longitude: params[:longitude])
+      daily_forecasts = service.fetch_forecast
+
       render json: {
-        data: [
-          sample_data, sample_data, sample_data, sample_data, sample_data, sample_data, sample_data
-        ]
+        data: daily_forecasts
       }
     end
   end

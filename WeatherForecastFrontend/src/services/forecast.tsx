@@ -6,11 +6,10 @@ type ForecastResponse = {
 };
 
 type Forecast = {
-  day: string;
+  time: string;
   max: string;
   min: string;
-  isCurrentDay: boolean;
-  isSunny: boolean;
+  weatherCode: number;
 };
 
 export const fetchForecast = (location: WeatherLocation) => {

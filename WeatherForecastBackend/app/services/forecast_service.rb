@@ -4,14 +4,36 @@ class ForecastService
   include HTTParty
   base_uri 'https://api.open-meteo.com/'
 
-  def fetch_forecast(zip_code)
-    results.first.coordinates
-    self.class.get('/v1/forecast', { query: {
-                     latitude: results.latitude,
-                     longitude: results.longitude,
-                     daily: weather_code,
-                     timezone: results.timezone
-                   } })
+  attr_reader :zip_code, :latitude, :longitude
+
+  FORECAST_DAYS = 7
+  def initialize(zip_code:, latitude:, longitude:)
+    @zip_code = zip_code
+    @latitude = latitude
+    @longitude = longitude
+  end
+
+  def fetch_forecast
+    response = self.class.get('/v1/forecast', { query: {
+                                latitude:,
+                                longitude:,
+                                daily: 'apparent_temperature_max,apparent_temperature_min,weather_code',
+
+                                # We want to include the current day in the forecast
+                                forecast_days: FORECAST_DAYS - 1,
+                                past_days: 1
+                              } })
+    raw_forecast = JSON.parse(response.body).with_indifferent_access
+    puts raw_forecast
+    daily_data = raw_forecast['daily']
+    daily_units = raw_forecast['daily_units']
+
+    (0...ForecastService::FORECAST_DAYS).map do |i|
+      DailyForecast.new(time: daily_data['time'][i],
+                        weather_code: daily_data['weather_code'][i],
+                        max: "#{daily_data['apparent_temperature_max'][i]}#{daily_units['apparent_temperature_max']}",
+                        min: "#{daily_data['apparent_temperature_min'][i]}#{daily_units['apparent_temperature_max']}")
+    end
   end
 
   def fetch_temp_token
