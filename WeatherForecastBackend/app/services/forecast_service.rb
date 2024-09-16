@@ -20,8 +20,8 @@ class ForecastService
                                 daily: 'apparent_temperature_max,apparent_temperature_min,weather_code',
 
                                 # We want to include the current day in the forecast
-                                forecast_days: FORECAST_DAYS - 1,
-                                past_days: 1
+                                forecast_days: FORECAST_DAYS
+
                               } })
     raw_forecast = JSON.parse(response.body).with_indifferent_access
     puts raw_forecast

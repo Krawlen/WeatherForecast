@@ -31,18 +31,20 @@ export const ForecastResults = ({
   }
 
   return (
-    <div className="flex flex-nowrap flex-row gap-6 justify-center overflow-x-auto w-screen mx-10">
-      {data.map((v, i) => {
-        return (
-          <ForecastResult
-            key={i}
-            time={v.time}
-            max={v.max}
-            min={v.min}
-            weatherCode={v.weatherCode}
-          />
-        );
-      })}
+    <div className="w-5/6 flex flex-row overflow-x-auto items-center justify-center">
+      <div className="flex  flex-row gap-6 justify-center items-center w-full overflow-visible">
+        {data.map((v, i) => {
+          return (
+            <ForecastResult
+              key={i}
+              time={v.time}
+              max={v.max}
+              min={v.min}
+              weatherCode={v.weatherCode}
+            />
+          );
+        })}
+      </div>
     </div>
   );
 };
@@ -63,7 +65,7 @@ const ForecastResult = ({
   const date = new Date(time);
   const isCurrentDay = new Date().getDate() == date.getDate();
   const weatherContainerCls = classNames(
-    "shadow-lg shrink flex-auto rounded-lg",
+    "shadow-lg shrink flex-auto rounded-lg m-2",
     {
       "outline outline-4 outline-blue-500": isCurrentDay,
     },
