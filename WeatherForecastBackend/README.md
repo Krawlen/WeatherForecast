@@ -23,12 +23,3 @@ This app serves as a backend for a Weather Forecast. This rails app serves 2 key
 
 - Docker
 - Mapbox Account
-
-### Running the app
-
-1. Create a .env file using .env.example as a starting point. Make sure to update the values as needed.
-2.
-
-### Running tests
-
-1. Run docker

@@ -13,7 +13,7 @@ export const WeatherForecastScreen = () => {
     setWeatherLocation(newLocation);
   };
 
-  const { data: bootstrapData, error, isLoading } = useBootstrap();
+  const { data: bootstrapData, isLoading } = useBootstrap();
 
   if (isLoading) {
     return <LoadingScreen />;

@@ -1,15 +1,17 @@
 FROM node:22.8.0-alpine
 
-WORKDIR /PORTFOLIO
+WORKDIR /react
 
 COPY package.json .
 
-RUN npm install
 
 COPY . .
+RUN npm install
+RUN npm run build
+RUN npm i -g serve
+
 
 ENV PORT=8080
 
 EXPOSE 8080
-# docker build . -t weather-forecast-frontend
-CMD [ "serve", "-s", "dist" ]
+CMD [ "serve", "-s", "dist", "-p", "8080" ]

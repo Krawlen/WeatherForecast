@@ -1,0 +1,25 @@
+services:
+  weather-forecast-backend:
+    image: weather-forecast-backend
+    build:
+      context: ./WeatherForecastBackend
+      dockerfile: ./Dockerfile
+    environment:
+      MAPBOX_APIKEY: ${MAPBOX_APIKEY}
+      MAPBOX_USERNAME: ${MAPBOX_USERNAME}
+      FRONTEND_URL: ${FRONTEND_URL}
+      REDIS_URL: ${REDIS_URL}
+      RAILS_MASTER_KEY: ${RAILS_MASTER_KEY}
+    ports:
+      - 3000:3000
+    command: ./bin/rails server
+  weather-forecast-frontend:
+    image: weather-forecast-frontend
+    build:
+      context: ./WeatherForecastFrontend
+      dockerfile: ./Dockerfile
+    environment:
+      VITE_BACKEND_URL: ${VITE_BACKEND_URL}
+    ports:
+      - 8080:8080
+    command: serve -s dist
