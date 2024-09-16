@@ -3,13 +3,14 @@ import { useBootstrap } from "../hooks/use-bootstrap";
 import { SearchAddress } from "./search-address";
 import { ForecastResults } from "./forecast-results";
 import { LoadingScreen } from "./loading-screen";
+import { WeatherLocation } from "../models/weather-location";
 
 export const WeatherForecastScreen = () => {
-  const [zipCode, setZipCode] = useState<string>("");
+  const [weatherLocation, setWeatherLocation] =
+    useState<WeatherLocation | null>(null);
 
-  const handleAddressChange = (zipCode: string) => {
-    console.log(zipCode);
-    setZipCode(zipCode);
+  const handleLocationChange = (newLocation: WeatherLocation) => {
+    setWeatherLocation(newLocation);
   };
 
   const { data: bootstrapData, error, isLoading } = useBootstrap();
@@ -26,9 +27,11 @@ export const WeatherForecastScreen = () => {
 
       <SearchAddress
         mapboxKey={bootstrapData?.mapboxKey || ""}
-        onZipcodeChange={handleAddressChange}
+        onLocationChange={handleLocationChange}
       />
-      {zipCode ? <ForecastResults></ForecastResults> : null}
+      {weatherLocation ? (
+        <ForecastResults weatherLocation={weatherLocation}></ForecastResults>
+      ) : null}
     </div>
   );
 };

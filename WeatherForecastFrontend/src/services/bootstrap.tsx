@@ -6,5 +6,5 @@ type EnvResponse = {
 
 export const fetchBootstrapData = () => {
   const client = createApiClient();
-  return client.get<EnvResponse>("/bootstrap");
+  return client.get<EnvResponse>("/v1/bootstrap");
 };

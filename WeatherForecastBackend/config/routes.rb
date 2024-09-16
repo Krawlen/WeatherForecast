@@ -13,5 +13,6 @@ Rails.application.routes.draw do
 
   namespace :v1 do
     get 'bootstrap', to: 'bootstrap#show'
+    post 'forecast', to: 'forecast#create'
   end
 end

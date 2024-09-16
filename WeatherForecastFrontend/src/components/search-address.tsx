@@ -1,38 +1,41 @@
 import { Geocoder } from "@mapbox/search-js-react";
 import { FormEvent, useState } from "react";
-
-type Suggestion = {
-  fullAddress: string | undefined;
-  zipcode: string | undefined;
-};
+import { WeatherLocation } from "../models/weather-location";
 
 export const SearchAddress = ({
-  onZipcodeChange,
+  onLocationChange,
   mapboxKey,
 }: {
-  onZipcodeChange: (zipcode: string) => void;
+  onLocationChange: (location: WeatherLocation) => void;
   mapboxKey: string;
 }) => {
   const [search, setSearch] = useState<string>("");
-  const [topSuggestion, setTopSuggestion] = useState<Suggestion>({
-    fullAddress: "",
-    zipcode: "",
-  });
+  const [topSuggestion, setTopSuggestion] = useState<GeocodingResponse | null>(
+    null,
+  );
 
   const handleSearchChange = (d: string) => {
     setSearch(d);
   };
   const onFormSubmit = (e: FormEvent) => {
     e.preventDefault();
-    setSearch(topSuggestion.fullAddress || "");
-    handleSuggestionPicked(topSuggestion);
+    const location = topSuggestion
+      ? geocodeResponseToLocation(topSuggestion)
+      : null;
+    if (location) {
+      setSearch(location.fullAddress);
+      handleSuggestionPicked(topSuggestion);
+    } else {
+      // TODO: Show toast asking for a new address. Maybe clear the search?
+    }
   };
 
-  const handleSuggestionPicked = (suggestion: Suggestion) => {
-    if (suggestion.zipcode) {
-      onZipcodeChange(suggestion.zipcode);
+  const handleSuggestionPicked = (suggestion: GeocodingResponse | null) => {
+    const location = geocodeResponseToLocation(suggestion);
+    if (location) {
+      onLocationChange(location);
     } else {
-      // Show toast asking for a new address
+      // TODO: Show toast asking for a new address. Maybe clear the search?
     }
   };
 
@@ -46,21 +49,51 @@ export const SearchAddress = ({
           onChange={handleSearchChange}
           onSuggest={(res) => {
             if (res.features[0]) {
-              setTopSuggestion({
-                fullAddress: res.features[0].properties.full_address,
-                zipcode: res.features[0].properties.context.postcode?.name,
-              });
+              setTopSuggestion(res.features[0]);
             }
           }}
           onRetrieve={(res) => {
-            handleSuggestionPicked({
-              zipcode: res.properties.context.postcode?.name,
-              fullAddress: res.properties.full_address,
-            });
+            handleSuggestionPicked(res);
           }}
           accessToken={mapboxKey}
         />
       </div>
     </form>
   );
+};
+
+interface GeocodingResponse {
+  properties: {
+    coordinates?: {
+      latitude: number;
+      longitude: number;
+    };
+    context: {
+      postcode?: {
+        name: string;
+      };
+    };
+    full_address: string;
+  };
+}
+
+const geocodeResponseToLocation = (
+  res: GeocodingResponse | null,
+): WeatherLocation | null => {
+  if (res) {
+    const fullAddress = res.properties.full_address;
+    const latitude = res?.properties?.coordinates?.latitude;
+    const longitude = res?.properties?.coordinates?.longitude;
+    const zipCode = res?.properties?.context?.postcode?.name;
+
+    if (fullAddress && latitude && longitude && zipCode) {
+      return {
+        fullAddress,
+        latitude,
+        longitude,
+        zipCode,
+      };
+    }
+  }
+  return null;
 };
